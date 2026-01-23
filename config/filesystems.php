@@ -56,6 +56,10 @@ return [
         'url' => env('AWS_URL'),
     ],
 
+        'cloudinary' => [
+        'driver' => 'cloudinary',
+    ],
+
     ],
 
     /*
