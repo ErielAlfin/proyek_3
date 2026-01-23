@@ -8,6 +8,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
+
+            if (!Schema::hasColumn('bookings', 'payment_status')) {
+                $table->string('payment_status')->default('pending');
+            }
+
             if (!Schema::hasColumn('bookings', 'metode_pembayaran')) {
                 $table->enum('metode_pembayaran', ['qris', 'transfer'])
                       ->default('qris');
@@ -18,6 +23,10 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
+            if (Schema::hasColumn('bookings', 'payment_status')) {
+                $table->dropColumn('payment_status');
+            }
+
             if (Schema::hasColumn('bookings', 'metode_pembayaran')) {
                 $table->dropColumn('metode_pembayaran');
             }
