@@ -1,3 +1,5 @@
+@php use Illuminate\Support\Str; @endphp
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -53,7 +55,13 @@
 
         @forelse ($barbers as $barber)
         <div class="bg-white rounded-xl shadow p-4">
-          <img src="{{ $barber->foto }}" class="w-full h-40 object-cover rounded-lg" alt="{{ $barber->nama }}">
+          <img 
+  src="{{ Str::startsWith($barber->foto, 'http') 
+        ? $barber->foto 
+        : asset('storage/'.$barber->foto) }}" 
+  class="w-full h-40 object-cover rounded-lg"
+>
+
 
 
           <div class="mt-4">
