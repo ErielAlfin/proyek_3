@@ -14,22 +14,14 @@ return new class extends Migration {
             }
 
             if (!Schema::hasColumn('bookings', 'metode_pembayaran')) {
-                $table->enum('metode_pembayaran', ['qris', 'transfer'])
-                      ->default('qris');
+                $table->enum('metode_pembayaran', ['qris', 'transfer'])->default('qris');
             }
+
         });
     }
 
     public function down(): void
     {
-        Schema::table('bookings', function (Blueprint $table) {
-            if (Schema::hasColumn('bookings', 'payment_status')) {
-                $table->dropColumn('payment_status');
-            }
-
-            if (Schema::hasColumn('bookings', 'metode_pembayaran')) {
-                $table->dropColumn('metode_pembayaran');
-            }
-        });
+        // intentionally empty (production-safe)
     }
 };
