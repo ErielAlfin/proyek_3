@@ -1,5 +1,3 @@
-@php use Illuminate\Support\Str; @endphp
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -55,14 +53,7 @@
 
         @forelse ($barbers as $barber)
         <div class="bg-white rounded-xl shadow p-4">
-          <img 
-  src="{{ Str::startsWith($barber->foto, 'http') 
-        ? $barber->foto 
-        : asset('storage/'.$barber->foto) }}" 
-  class="w-full h-40 object-cover rounded-lg"
->
-
-
+          <img src="{{ asset('storage/' . $barber->foto) }}" class="w-full h-40 object-cover rounded-lg" />
 
           <div class="mt-4">
             <div class="flex justify-between items-start">

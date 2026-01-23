@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Barber;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class BarberController extends Controller
 {
@@ -37,9 +36,8 @@ class BarberController extends Controller
         $barber->telepon = $request->telepon;
 
         if ($request->hasFile('foto')) {
-    $uploadedFileUrl = $request->file('foto')->storeOnCloudinary('barbers');
-    $barber->foto = $uploadedFileUrl->getSecurePath();
-}
+            $barber->foto = $request->file('foto')->store('barbers', 'public');
+        }
 
         $barber->save();
 
@@ -69,10 +67,8 @@ class BarberController extends Controller
         $barber->telepon = $request->telepon;
 
         if ($request->hasFile('foto')) {
-    $uploadedFileUrl = $request->file('foto')->storeOnCloudinary('barbers');
-    $barber->foto = $uploadedFileUrl->getSecurePath();
-}
-
+            $barber->foto = $request->file('foto')->store('barbers', 'public');
+        }
 
         $barber->save();
 
