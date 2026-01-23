@@ -69,8 +69,10 @@ class BarberController extends Controller
         $barber->telepon = $request->telepon;
 
         if ($request->hasFile('foto')) {
-            $barber->foto = $request->file('foto')->store('barbers', 'public');
-        }
+    $uploadedFileUrl = $request->file('foto')->storeOnCloudinary('barbers');
+    $barber->foto = $uploadedFileUrl->getSecurePath();
+}
+
 
         $barber->save();
 
