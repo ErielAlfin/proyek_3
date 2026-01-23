@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barbershop Klasik - Potong Rambut Pria Profesional</title>
-    <link rel="icon" type="image/svg+xml" href="{{ asset('vite.svg') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ time() }}">
   </head>
   <body>
     {{-- Navbar --}}
