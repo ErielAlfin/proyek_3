@@ -1,0 +1,24 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('../images/barber-bg.jpg') no-repeat center/cover;
+    color: #fff;
+}
+
+.card {
+    background: rgba(20,20,20,0.95);
+    padding: 30px;
+    border-radius: 18px;
+    width: 420px;
+    margin: auto;
+}
+
+h2 { color: #d4af37; text-align: center; }
+
+button {
+    background: #d4af37;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    width: 100%;
+    cursor: pointer;
+}

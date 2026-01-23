@@ -1,0 +1,63 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background: #fafafa;
+  color: #333;
+  margin: 0;
+  padding: 40px 0;
+}
+
+.comment-section {
+  max-width: 700px;
+  margin: auto;
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.comment-section h2 {
+  text-align: center;
+  color: #b8860b;
+  margin-bottom: 20px;
+}
+
+.comment-card {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.comment-card h3 {
+  font-size: 18px;
+  color: #333;
+}
+
+.comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.comment-item {
+  background: #f7f7f7;
+  padding: 15px 20px;
+  border-radius: 10px;
+}
+
+.comment-item h4 {
+  margin: 0;
+  color: #444;
+}
+
+.comment-item .stars {
+  color: gold;
+  font-size: 16px;
+}
+
+.comment-item p {
+  margin: 8px 0;
+}
+
+.comment-item small {
+  color: #777;
+  font-size: 13px;
+}
