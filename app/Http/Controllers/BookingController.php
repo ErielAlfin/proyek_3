@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class BookingController extends Controller
@@ -53,7 +53,8 @@ class BookingController extends Controller
 
 
     public function uploadPayment(Request $request, Booking $booking)
-    {
+{
+    try {
         if ($booking->user_id !== auth()->id()) {
             abort(403);
         }
@@ -62,23 +63,36 @@ class BookingController extends Controller
             'bukti_transfer' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        $file = $request->file('bukti_transfer');
+
+        if (!$file) {
+            throw new \Exception('File bukti_transfer NULL');
+        }
+
         $upload = Cloudinary::upload(
-    $request->file('bukti_transfer')->getRealPath(),
-    ['folder' => 'bukti_transfer']
-);
+            $file->getRealPath(),
+            ['folder' => 'bukti_transfer']
+        );
 
         $booking->update([
-    'bukti_pembayaran' => $upload->getSecurePath(),
-    'metode_pembayaran' => 'qris',
-    'status' => 'waiting',
-]);
-
-
+            'bukti_pembayaran' => $upload->getSecurePath(), // URL CLOUDINARY
+            'metode_pembayaran' => 'qris',
+            'status' => 'waiting',
+        ]);
 
         return redirect()->route('profil.index')
-    ->with('success', 'Bukti pembayaran berhasil dikirim');
+            ->with('success', 'Bukti pembayaran berhasil dikirim');
 
+    } catch (\Throwable $e) {
+        Log::error('UPLOAD PAYMENT ERROR', [
+            'message' => $e->getMessage(),
+            'line' => $e->getLine(),
+            'file' => $e->getFile(),
+        ]);
+
+        abort(500, $e->getMessage());
     }
+}
 
     public function clearHistory()
 {

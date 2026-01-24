@@ -95,7 +95,7 @@
                     <td class="py-4 font-semibold">Rp {{ number_format($order->layanan->harga ?? $order->harga ?? 0, 0, ',', '.') }}</td>
                     <td class="py-4">
                         @if($order->bukti_pembayaran)
-                            <img src="{{ asset('storage/' . $order->bukti_pembayaran) }}" width="80" class="rounded-md">
+                            <img src="{{ $booking->bukti_pembayaran }}" width="80" class="rounded-md">
                         @else
                             <span class="text-gray-400">-</span>
                         @endif
