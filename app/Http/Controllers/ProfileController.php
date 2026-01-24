@@ -10,16 +10,17 @@ use App\Models\Booking;
 class ProfileController extends Controller
 {
     public function index()
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        $bookings = Booking::where('user_id', $user->id)
-                           ->with(['barber', 'layanan'])
-                           ->orderBy('waktu_booking', 'desc')
-                           ->get();
+    $bookings = Booking::where('user_id', $user->id)
+        ->with(['barber', 'layanan'])
+        ->orderBy('created_at', 'desc')
+        ->get();
 
-        return view('profile', compact('user', 'bookings'));
-    }
+    return view('profile', compact('user', 'bookings'));
+}
+
 
     public function updatePhoto(Request $request)
     {
