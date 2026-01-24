@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class BookingController extends Controller
 {
@@ -61,13 +62,17 @@ class BookingController extends Controller
             'bukti_transfer' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $path = $request->file('bukti_transfer')->store('bukti_transfer', 'public');
+        $upload = Cloudinary::upload(
+    $request->file('bukti_transfer')->getRealPath(),
+    ['folder' => 'bukti_transfer']
+);
 
         $booking->update([
-    'bukti_pembayaran' => $path,
+    'bukti_pembayaran' => $upload->getSecurePath(),
     'metode_pembayaran' => 'qris',
     'status' => 'waiting',
 ]);
+
 
 
         return redirect()->route('profil.index')
