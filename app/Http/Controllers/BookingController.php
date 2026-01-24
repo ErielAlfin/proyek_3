@@ -67,8 +67,9 @@ class BookingController extends Controller
 ]);
 
 
-        return redirect()->route('profil.index', $booking->id)
-            ->with('success', 'Bukti pembayaran berhasil dikirim');
+        return redirect()->route('profil.index')
+    ->with('success', 'Bukti pembayaran berhasil dikirim');
+
     }
 
     public function clearHistory()
