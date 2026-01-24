@@ -233,9 +233,9 @@ body {
 
 .gallery-item img {
   width: 100%;
-  height: 100%;
+  height: 200px; /* sesuai kebutuhan */
   object-fit: cover;
-  transition: transform 0.3s ease;
+  border-radius: 12px;
 }
 
 .gallery-item:hover img {
@@ -434,10 +434,9 @@ body {
 
 .barber-card img {
   width: 100%;
-  height: 220px;
+  height: 250px;
   object-fit: cover;
   border-radius: 12px;
-  margin-bottom: 16px;
 }
 
 .barber-card h3 {
