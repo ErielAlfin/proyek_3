@@ -70,7 +70,10 @@
     <div class="barber-grid">
       @foreach($barbers as $barber)
         <div class="barber-card">
-          <img src="{{ asset('storage/'.$barber->foto) }}" alt="{{ $barber->nama }}">
+          <img 
+  src="{{ $barber->foto ?? 'https://via.placeholder.com/300x200?text=No+Image' }}"
+  class="w-full h-40 object-cover rounded-lg"
+/>
           <h3>{{ $barber->nama }}</h3>
           <p>{{ $barber->deskripsi }}</p>
         </div>
