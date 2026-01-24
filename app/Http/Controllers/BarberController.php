@@ -23,33 +23,23 @@ class BarberController extends Controller
     }
 
     // SIMPAN BARBER
-    public function store(Request $request)
-    {
+    // SIMPAN BARBER (MODE DEBUG)
+public function store(Request $request)
+{
+    try {
         $request->validate([
             'nama' => 'required',
             'spesialis' => 'required',
-            'telepon' => 'nullable',
-            'foto' => 'image|mimes:jpg,jpeg,png|max:2048'
+            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $barber = new Barber();
-        $barber->nama = $request->nama;
-        $barber->spesialis = $request->spesialis;
-        $barber->telepon = $request->telepon;
+        dd('VALIDASI LOLOS');
 
-        if ($request->hasFile('foto')) {
-    $upload = Cloudinary::upload(
-        $request->file('foto')->getRealPath(),
-        ['folder' => 'barbers']
-    );
-    $barber->foto = $upload->getSecurePath(); // URL
+    } catch (\Exception $e) {
+        dd($e->getMessage());
+    }
 }
 
-
-        $barber->save();
-
-        return redirect()->route('admin.barber.index')->with('success', 'Barber berhasil ditambahkan!');
-    }
 
     // FORM EDIT
     public function edit($id)
