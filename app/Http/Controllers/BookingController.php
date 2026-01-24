@@ -25,15 +25,15 @@ class BookingController extends Controller
         ]);
 
         $booking = Booking::create([
-            'user_id' => auth()->id(),
-            'barber_id' => $request->barber_id,
-            'layanan_id' => $request->layanan_id,
-            'tanggal' => $request->tanggal,
-            'jam' => $request->jam,
-            'harga' => $request->harga,
-            'payment_status' => 'unpaid',
-            'status' => 'pending',
-        ]);
+    'user_id' => auth()->id(),
+    'barber_id' => $request->barber_id,
+    'layanan_id' => $request->layanan_id,
+    'tanggal' => $request->tanggal,
+    'jam' => $request->jam,
+    'harga' => $request->harga,
+    'status' => 'pending',
+]);
+
 
         return redirect()->route('booking.payment.show', $booking->id);
     }
@@ -61,10 +61,11 @@ class BookingController extends Controller
         $path = $request->file('bukti_transfer')->store('bukti_transfer', 'public');
 
         $booking->update([
-            'bukti_transfer' => $path,
-            'payment_status' => 'waiting',
-            'metode_pembayaran' => 'qris',
-        ]);
+    'bukti_pembayaran' => $path,
+    'metode_pembayaran' => 'qris',
+    'status' => 'waiting',
+]);
+
 
         return redirect()->route('profil.index', $booking->id)
             ->with('success', 'Bukti pembayaran berhasil dikirim');
@@ -73,7 +74,7 @@ class BookingController extends Controller
     public function clearHistory()
 {
     // Hanya hapus booking milik user yang sedang login
-    Booking::where('user_id', auth()->id())->delete();
+    Booking::where('user_id', auth()->id())->delete();  
 
     return back()->with('success', 'Riwayat reservasi berhasil dikosongkan.');
 }

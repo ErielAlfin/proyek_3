@@ -14,13 +14,13 @@ class Booking extends Model
 
     protected $fillable = [
     'user_id',
-    'layanan_id',
     'barber_id',
+    'layanan_id',
     'tanggal',
     'jam',
     'harga',
     'status',
-    'payment_status',
+    'metode_pembayaran',
     'bukti_pembayaran',
 ];
 
