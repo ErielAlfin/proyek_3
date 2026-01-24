@@ -44,8 +44,11 @@ class BookingController extends Controller
         abort(403);
     }
 
+    $booking->load(['barber', 'layanan']);
+
     return view('booking.payment', compact('booking'));
 }
+
 
 
     public function uploadPayment(Request $request, Booking $booking)

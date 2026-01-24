@@ -102,8 +102,9 @@
 
     <p><strong>Tanggal:</strong> {{ $booking->tanggal }}</p>
     <p><strong>Jam:</strong> {{ $booking->jam }}</p>
-    <p><strong>Barber:</strong> {{ $booking->barber->nama }}</p>
-    <p><strong>Layanan:</strong> {{ $booking->layanan->nama }}</p>
+    <p><strong>Barber:</strong> {{ optional($booking->barber)->nama ?? '-' }}</p>
+<p><strong>Layanan:</strong> {{ optional($booking->layanan)->nama ?? '-' }}</p>
+
 
     <hr>
 
