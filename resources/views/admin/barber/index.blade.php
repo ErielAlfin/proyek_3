@@ -53,7 +53,11 @@
 
         @forelse ($barbers as $barber)
         <div class="bg-white rounded-xl shadow p-4">
-          <img src="{{ asset('storage/' . $barber->foto) }}" class="w-full h-40 object-cover rounded-lg" />
+          <img 
+  src="{{ $barber->foto ?? 'https://via.placeholder.com/300x200?text=No+Image' }}"
+  class="w-full h-40 object-cover rounded-lg"
+/>
+
 
           <div class="mt-4">
             <div class="flex justify-between items-start">

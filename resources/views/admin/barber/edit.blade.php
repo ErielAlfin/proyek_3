@@ -37,7 +37,18 @@
             <!-- Foto Lama -->
             <div>
                 <label class="block mb-1 font-medium">Foto Sekarang</label>
-                <img src="{{ asset('storage/barbers/' . $barber->foto) }}" class="w-32 h-32 object-cover rounded-lg mb-3">
+                @if ($barber->foto)
+    <img 
+        src="{{ $barber->foto }}" 
+        class="w-32 h-32 object-cover rounded-lg mb-3"
+        alt="Foto Barber"
+    >
+@else
+    <div class="w-32 h-32 flex items-center justify-center bg-gray-200 rounded-lg mb-3 text-gray-500 text-sm">
+        Tidak ada foto
+    </div>
+@endif
+
             </div>
 
             <!-- Foto Baru -->
