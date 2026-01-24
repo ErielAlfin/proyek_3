@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Barber;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Cloudinary\Cloudinary;
 
 
 class BarberController extends Controller
@@ -25,15 +25,32 @@ class BarberController extends Controller
     // SIMPAN BARBER
     public function store(Request $request)
 {
-    try {
-        dd([
-            'hasFile' => $request->hasFile('foto'),
-            'tmp_path' => $request->file('foto')?->getRealPath(),
-            'env' => env('CLOUDINARY_URL'),
-        ]);
-    } catch (\Throwable $e) {
-        dd($e->getMessage());
+    $request->validate([
+        'nama' => 'required',
+        'spesialis' => 'required',
+        'telepon' => 'nullable',
+        'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048'
+    ]);
+
+    $barber = new Barber();
+    $barber->nama = $request->nama;
+    $barber->spesialis = $request->spesialis;
+    $barber->telepon = $request->telepon;
+
+    if ($request->hasFile('foto')) {
+        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+        $upload = $cloudinary->uploadApi()->upload(
+            $request->file('foto')->getRealPath(),
+            ['folder' => 'barbers']
+        );
+
+        $barber->foto = $upload['secure_url']; // simpan URL Cloudinary
     }
+
+    $barber->save();
+
+    return redirect()->route('admin.barber.index')
+                     ->with('success', 'Barber berhasil ditambahkan!');
 }
 
 
@@ -62,12 +79,14 @@ class BarberController extends Controller
         $barber->telepon = $request->telepon;
 
         if ($request->hasFile('foto')) {
-    $upload = Cloudinary::upload(
+    $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+    $upload = $cloudinary->uploadApi()->upload(
         $request->file('foto')->getRealPath(),
         ['folder' => 'barbers']
     );
-    $barber->foto = $upload->getSecurePath();
+    $barber->foto = $upload['secure_url'];
 }
+
 
 
         $barber->save();
