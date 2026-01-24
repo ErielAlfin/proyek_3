@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Galeri;
 use Illuminate\Http\Request;
+use Cloudinary\Cloudinary;
 
 class GaleriController extends Controller
 {
@@ -18,21 +19,29 @@ class GaleriController extends Controller
         return view('admin.galeri.create');
     }
 
-    public function store(Request $request)
+     public function store(Request $request)
     {
         $request->validate([
             'judul' => 'required',
             'deskripsi' => 'required',
-            'foto' => 'required|image'
+            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        $path = $request->file('foto')->store('galeri', 'public');
+        $galeri = new Galeri();
+        $galeri->judul = $request->judul;
+        $galeri->deskripsi = $request->deskripsi;
 
-        Galeri::create([
-            'judul' => $request->judul,
-            'deskripsi' => $request->deskripsi,
-            'foto' => $path
-        ]);
+        if ($request->hasFile('foto')) {
+            $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+            $upload = $cloudinary->uploadApi()->upload(
+                $request->file('foto')->getRealPath(),
+                ['folder' => 'galeri']
+            );
+
+            $galeri->foto = $upload['secure_url']; // simpan URL Cloudinary
+        }
+
+        $galeri->save();
 
         return redirect()->route('admin.galeri.index')->with('success', 'Foto berhasil ditambahkan!');
     }
@@ -53,8 +62,12 @@ class GaleriController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-            $path = $request->file('foto')->store('galeri', 'public');
-            $galeri->foto = $path;
+            $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+            $upload = $cloudinary->uploadApi()->upload(
+                $request->file('foto')->getRealPath(),
+                ['folder' => 'galeri']
+            );
+            $galeri->foto = $upload['secure_url'];
         }
 
         $galeri->judul = $request->judul;

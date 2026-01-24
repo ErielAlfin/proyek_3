@@ -55,7 +55,7 @@
 
         @foreach ($galeri as $item)
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-3">
-          <img src="{{ asset('storage/' . $item->foto) }}" class="rounded-xl h-40 w-full object-cover mb-3" />
+          <img src="{{ $item->foto }}" class="rounded-xl h-40 w-full object-cover mb-3" />
 
           <div class="flex justify-between items-start mb-1">
             <h3 class="font-semibold text-base">{{ $item->judul }}</h3>

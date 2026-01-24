@@ -34,7 +34,7 @@
         <!-- Foto lama -->
         <div>
             <p class="font-medium mb-1">Foto Sekarang:</p>
-            <img src="{{ asset('storage/' . $galeri->foto) }}" class="w-40 h-40 object-cover rounded-lg border">
+            <img src="{{ $galeri->foto }}" class="w-40 h-40 object-cover rounded-lg border">
         </div>
 
         <div class="flex justify-between pt-4">
