@@ -15,7 +15,9 @@ class ProfileController extends Controller
 
     $bookings = Booking::where('user_id', $user->id)
         ->with(['barber', 'layanan'])
-        ->orderBy('created_at', 'desc')
+        ->orderBy('tanggal', 'desc')
+->orderBy('jam', 'desc')
+
         ->get();
 
     return view('profile', compact('user', 'bookings'));
