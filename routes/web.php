@@ -126,4 +126,15 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/review', [ReviewController::class, 'store'])
         ->name('review.store');
+
+    Route::get('/test-cloudinary', function() {
+    try {
+        $cloudinary = new \Cloudinary\Cloudinary(env('CLOUDINARY_URL'));
+        $result = $cloudinary->uploadApi()->upload(public_path('test.jpg'));
+        dd($result);
+    } catch (\Exception $e) {
+        dd($e->getMessage());
+    }
+});
+
 });

@@ -65,22 +65,17 @@ class BookingController extends Controller
     ]);
 
     if ($request->hasFile('bukti_transfer')) {
-        try {
-            // Pake langsung CLOUDINARY_URL
-            $cloudinary = new \Cloudinary\Cloudinary(env('CLOUDINARY_URL'));
-
-            $upload = $cloudinary->uploadApi()->upload(
-                $request->file('bukti_transfer')->getRealPath(),
-                ['folder' => 'bukti_transfer']
-            );
-
-            // Simpan URL hasil upload ke database
-            $booking->bukti_pembayaran = $upload['secure_url'];
-        } catch (\Exception $e) {
-            // Kalau gagal upload, tampilkan error di halaman yang sama
-            return back()->with('error', 'Gagal upload ke Cloudinary: ' . $e->getMessage());
-        }
+    try {
+        $cloudinary = new \Cloudinary\Cloudinary(env('CLOUDINARY_URL'));
+        $filePath = $request->file('bukti_transfer')->getPathname();
+        $upload = $cloudinary->uploadApi()->upload($filePath, ['folder' => 'bukti_transfer']);
+        $booking->bukti_pembayaran = $upload['secure_url'];
+    } catch (\Exception $e) {
+        return back()->with('error', 'Gagal upload ke Cloudinary: ' . $e->getMessage());
     }
+}
+
+
 
     // Update status booking
     $booking->metode_pembayaran = 'qris';
