@@ -38,24 +38,24 @@ class AdminController extends Controller
 public function confirm($id)
 {
     $booking = Booking::findOrFail($id);
-    $booking->payment_status = 'paid';
-    $booking->status = 'confirmed'; // tambahkan ini
+    $booking->status = 'confirmed';
     $booking->save();
 
-    return back()->with('success', 'Pembayaran dikonfirmasi.');
+    return back()->with('success', 'Booking dikonfirmasi.');
 }
+
 
 
 public function reject($id)
 {
     $booking = Booking::findOrFail($id);
     $booking->status = 'cancel'; 
-    $booking->payment_status = 'unpaid';
     $booking->bukti_pembayaran = null;
     $booking->save();
 
     return back()->with('success', 'Booking ditolak.');
 }
+
 
 public function clearAllBookings()
 {
