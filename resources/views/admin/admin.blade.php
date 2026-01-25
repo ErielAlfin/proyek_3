@@ -107,25 +107,37 @@
 </td>
 
                     <td class="py-4 flex gap-2 items-center">
-                        @if($order->payment_status == 'waiting' || $order->payment_status == 'unpaid')
-                            <form action="/admin/bookings/{{ $order->id }}/confirm" method="POST">
-                                @csrf
-                                <button class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600">✅</button>
-                            </form>
-                            <form action="{{ url('/admin/bookings/' . $order->id . '/reject') }}" method="POST">
-    @csrf
-    <button type="submit" class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600">
-        ❌
-    </button>
-</form>
 
-                        @else
-                            <span class="px-3 py-1 rounded-md text-white 
-                                {{ $order->payment_status == 'paid' ? 'bg-green-500' : 'bg-gray-400' }}">
-                                {{ ucfirst($order->payment_status ?? 'unpaid') }}
-                            </span>
-                        @endif
-                    </td>
+    @if($order->status == 'pending')
+        <!-- CONFIRM -->
+        <form action="{{ route('admin.bookings.confirm', $order->id) }}" method="POST">
+            @csrf
+            <button class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600">
+                ✅
+            </button>
+        </form>
+
+        <!-- REJECT -->
+        <form action="{{ route('admin.bookings.reject', $order->id) }}" method="POST">
+            @csrf
+            <button class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600">
+                ❌
+            </button>
+        </form>
+
+    @elseif($order->status == 'confirmed')
+        <span class="px-3 py-1 rounded-md bg-green-500 text-white">
+            Confirmed
+        </span>
+
+    @elseif($order->status == 'cancel')
+        <span class="px-3 py-1 rounded-md bg-red-500 text-white">
+            Rejected
+        </span>
+    @endif
+
+</td>
+
                 </tr>
                 @empty
                 <tr>
