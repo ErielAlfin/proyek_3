@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Cloudinary\Cloudinary;
 
 class BookingController extends Controller
 {
@@ -52,28 +53,35 @@ class BookingController extends Controller
 
 
     public function uploadPayment(Request $request, Booking $booking)
-    {
-        if ($booking->user_id !== auth()->id()) {
-            abort(403);
-        }
-
-        $request->validate([
-            'bukti_transfer' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
-
-        $path = $request->file('bukti_transfer')->store('bukti_transfer', 'public');
-
-        $booking->update([
-    'bukti_pembayaran' => $path,
-    'metode_pembayaran' => 'qris',
-    'status' => 'waiting',
-]);
-
-
-        return redirect()->route('profil.index')
-    ->with('success', 'Bukti pembayaran berhasil dikirim');
-
+{
+    if ($booking->user_id !== auth()->id()) {
+        abort(403);
     }
+
+    $request->validate([
+        'bukti_transfer' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    if ($request->hasFile('bukti_transfer')) {
+        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+
+        $upload = $cloudinary->uploadApi()->upload(
+            $request->file('bukti_transfer')->getRealPath(),
+            ['folder' => 'bukti_transfer']
+        );
+
+        $booking->bukti_pembayaran = $upload['secure_url'];
+    }
+
+    $booking->metode_pembayaran = 'qris';
+    $booking->status = 'waiting';
+    $booking->save();
+
+    return redirect()
+        ->route('profil.index')
+        ->with('success', 'Bukti pembayaran berhasil dikirim');
+}
+
 
     public function clearHistory()
 {

@@ -95,13 +95,18 @@
                     <td class="py-4 font-semibold">Rp {{ number_format($order->layanan->harga ?? $order->harga ?? 0, 0, ',', '.') }}</td>
                     <td class="py-4">
                         @if($order->bukti_pembayaran)
-                            <img src="{{ asset('storage/' . $order->bukti_pembayaran) }}" width="80" class="rounded-md">
-                        @else
-                            <span class="text-gray-400">-</span>
-                        @endif
+    <img 
+        src="{{ $order->bukti_pembayaran }}" 
+        width="80" 
+        class="rounded-md"
+    >
+@else
+    <span class="text-gray-400">-</span>
+@endif
+
                     </td>
                     <td class="py-4 flex gap-2 items-center">
-                        @if($order->payment_status == 'waiting' || $order->payment_status == 'unpaid')
+                        @if($order->status == 'waiting' || $order->status == 'pending')
                             <form action="/admin/bookings/{{ $order->id }}/confirm" method="POST">
                                 @csrf
                                 <button class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600">✅</button>
@@ -115,9 +120,10 @@
 
                         @else
                             <span class="px-3 py-1 rounded-md text-white 
-                                {{ $order->payment_status == 'paid' ? 'bg-green-500' : 'bg-gray-400' }}">
-                                {{ ucfirst($order->payment_status ?? 'unpaid') }}
-                            </span>
+    {{ $order->status == 'paid' ? 'bg-green-500' : 'bg-gray-400' }}">
+    {{ ucfirst($order->status) }}
+</span>
+
                         @endif
                     </td>
                 </tr>
