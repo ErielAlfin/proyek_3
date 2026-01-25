@@ -54,11 +54,16 @@
       <h2>Riwayat Reservasi</h2>
       @forelse ($bookings as $booking)
         <div class="history-item">
-  <h3>{{ $booking->barber->nama ?? '-' }} - {{ $booking->layanan->nama ?? '-' }}</h3>
+  <h3>
+  {{ optional($booking->barber)->nama ?? '-' }}
+  -
+  {{ optional($booking->layanan)->nama ?? '-' }}
+</h3>
+
   <p>Tanggal: {{ \Carbon\Carbon::parse($booking->tanggal.' '.$booking->jam)->format('d F Y H:i') }}</p>
   <p>Status: <strong>{{ $booking->status }}</strong></p>
 
-  @if($booking->status == 'confirmed' && !$booking->review)
+  @if($booking->status == 'confirmed' && empty($booking->review))
     <a href="{{ route('review.create', $booking->id) }}" class="btn-review">
       ⭐ Beri Review
     </a>
