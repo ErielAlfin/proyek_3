@@ -108,22 +108,14 @@
 
                     <td class="py-4 flex gap-2 items-center">
 
-    @if($order->status == 'pending')
-        <!-- CONFIRM -->
-        <form action="{{ route('admin.bookings.confirm', $order->id) }}" method="POST">
-            @csrf
-            <button class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600">
-                ✅
-            </button>
-        </form>
+    @if($order->status == 'pending' || is_null($order->status))
+    ✅ ❌
+@elseif($order->status == 'confirmed')
+    Confirmed
+@elseif($order->status == 'cancel')
+    Rejected
+@endif
 
-        <!-- REJECT -->
-        <form action="{{ route('admin.bookings.reject', $order->id) }}" method="POST">
-            @csrf
-            <button class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600">
-                ❌
-            </button>
-        </form>
 
     @elseif($order->status == 'confirmed')
         <span class="px-3 py-1 rounded-md bg-green-500 text-white">
