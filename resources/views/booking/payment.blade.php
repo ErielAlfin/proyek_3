@@ -91,6 +91,33 @@
             font-size: 0.85em;
             color: #ccc;
         }
+
+        /* Tambahan styling error / flash */
+        .alert {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .alert-error {
+            background: #ffcccc;
+            color: #990000;
+        }
+
+        .alert-success {
+            background: #ccffcc;
+            color: #006600;
+        }
+
+        .error-text {
+            color: #ff9999;
+            font-size: 0.85em;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -116,10 +143,29 @@
         <p class="note">* Setelah melakukan pembayaran, upload bukti transfer.</p>
     </div>
 
+    <!-- Tampilkan flash message sukses atau error -->
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-error">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <form action="{{ route('booking.payment.upload', $booking->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         <label>Upload Bukti Pembayaran</label>
         <input type="file" name="bukti_transfer" required>
+
+        <!-- Tampilkan error validasi file -->
+        @error('bukti_transfer')
+            <div class="error-text">{{ $message }}</div>
+        @enderror
+
         <button type="submit">Kirim Bukti Pembayaran</button>
     </form>
 </div>
