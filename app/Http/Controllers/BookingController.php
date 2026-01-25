@@ -54,6 +54,10 @@ class BookingController extends Controller
 
     public function uploadPayment(Request $request, Booking $booking)
 {
+    // 1. Cek apakah request masuk
+    dd($request->all(), $request->file('bukti_transfer'));
+
+    // ---- Setelah berhasil cek file ----
     if ($booking->user_id !== auth()->id()) {
         abort(403);
     }
@@ -62,28 +66,20 @@ class BookingController extends Controller
         'bukti_transfer' => 'required|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
-    if ($request->hasFile('bukti_transfer')) {
-        $cloudinary = new Cloudinary(
-    config('services.cloudinary.url')
-);
+    $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+    $upload = $cloudinary->uploadApi()->upload(
+        $request->file('bukti_transfer')->getRealPath(),
+        ['folder' => 'bukti_transfer']
+    );
 
-
-        $upload = $cloudinary->uploadApi()->upload(
-            $request->file('bukti_transfer')->getRealPath(),
-            ['folder' => 'bukti_transfer']
-        );
-
-        $booking->bukti_pembayaran = $upload['secure_url'];
-    }
-
+    $booking->bukti_pembayaran = $upload['secure_url'];
     $booking->metode_pembayaran = 'qris';
     $booking->status = 'waiting';
     $booking->save();
 
-    return redirect()
-        ->route('profil.index')
-        ->with('success', 'Bukti pembayaran berhasil dikirim');
+    return redirect()->route('profil.index')->with('success', 'Bukti pembayaran berhasil dikirim');
 }
+
 
 
     public function clearHistory()
