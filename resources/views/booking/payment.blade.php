@@ -150,11 +150,14 @@
         </div>
     @endif
 
-    @if(session('error'))
-        <div class="alert alert-error">
-            {{ session('error') }}
-        </div>
-    @endif
+    @error('bukti_transfer')
+    <p style="color:red">{{ $message }}</p>
+@enderror
+
+@if(session('error'))
+    <p style="color:red">{{ session('error') }}</p>
+@endif
+
 
     <form action="{{ route('booking.payment.upload', $booking->id) }}" method="POST" enctype="multipart/form-data">
         @csrf

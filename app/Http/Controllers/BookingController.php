@@ -64,7 +64,13 @@ class BookingController extends Controller
 
     if ($request->hasFile('bukti_transfer')) {
         try {
-            $cloudinary = new \Cloudinary\Cloudinary(env('CLOUDINARY_URL'));
+            $cloudinary = new Cloudinary([
+                'cloud' => [
+                    'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                    'api_key'    => env('CLOUDINARY_API_KEY'),
+                    'api_secret' => env('CLOUDINARY_API_SECRET'),
+                ],
+            ]);
 
             $upload = $cloudinary->uploadApi()->upload(
                 $request->file('bukti_transfer')->getRealPath(),
