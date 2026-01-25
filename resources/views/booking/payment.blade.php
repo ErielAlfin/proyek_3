@@ -117,7 +117,17 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
         laravelForm.append('_token', '{{ csrf_token() }}');
         laravelForm.append('bukti_transfer_url', secure_url);
 
-        const laravelResponse = await axios.post('{{ route('booking.payment.upload', $booking->id) }}', laravelForm);
+        const laravelResponse = await axios.post(
+    '{{ route('booking.payment.upload', $booking->id) }}',
+    laravelForm,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    }
+);
+
 
         if(laravelResponse.data.success){
             status.innerText = 'Bukti pembayaran berhasil dikirim! Redirect ke profil...';
