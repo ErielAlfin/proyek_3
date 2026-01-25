@@ -69,7 +69,7 @@ button:hover { background: #fff; color: #000; }
         @csrf
         <label>Upload Bukti Pembayaran</label>
         <input type="file" id="bukti_transfer" accept="image/*" required>
-        <input type="hidden" name="bukti_transfer_url" id="bukti_transfer_url">
+<input type="hidden" name="bukti_transfer_url" id="bukti_transfer_url">
         <button type="submit" id="submitBtn">Kirim Bukti Pembayaran</button>
     </form>
 
