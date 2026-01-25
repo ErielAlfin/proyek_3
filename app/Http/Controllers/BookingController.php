@@ -54,21 +54,23 @@ class BookingController extends Controller
 
     public function uploadPayment(Request $request, Booking $booking)
 {
-    if (!auth()->check() || $booking->user_id !== auth()->id()) {
-        return response()->json(['success' => false], 403);
+    if ($booking->user_id !== auth()->id()) {
+        abort(403);
     }
 
     $request->validate([
-        'bukti_transfer_url' => 'required|string',
+        'bukti_transfer_url' => 'required|url',
     ]);
 
-    $booking->bukti_pembayaran = $request->bukti_transfer_url;
-    $booking->metode_pembayaran = 'qris';
-    $booking->status = 'waiting';
-    $booking->save();
+    $booking->update([
+        'bukti_pembayaran' => $request->bukti_transfer_url,
+        'metode_pembayaran' => 'qris',   // pastikan ENUM / VARCHAR cocok
+        'status' => 'waiting',           // HARUS ADA DI ENUM
+    ]);
 
     return response()->json(['success' => true]);
 }
+
 
 
 
