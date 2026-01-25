@@ -54,47 +54,22 @@ class BookingController extends Controller
 
     public function uploadPayment(Request $request, Booking $booking)
 {
-    // Pastikan hanya user pemilik booking yang bisa upload
     if ($booking->user_id !== auth()->id()) {
         abort(403);
     }
 
-    // Validasi file
     $request->validate([
-        'bukti_transfer' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        'bukti_transfer_url' => 'required|url',
     ]);
 
-    if ($request->hasFile('bukti_transfer')) {
-    try {
-        $cloudinary = new \Cloudinary\Cloudinary(env('CLOUDINARY_URL'));
-
-        $file = $request->file('bukti_transfer');
-        $stream = fopen($file->getPathname(), 'r');
-
-        $upload = $cloudinary->uploadApi()->upload($stream, ['folder' => 'bukti_transfer']);
-
-        fclose($stream);
-
-        $booking->bukti_pembayaran = $upload['secure_url'];
-
-    } catch (\Exception $e) {
-        return back()->with('error', 'Gagal upload ke Cloudinary: ' . $e->getMessage());
-    }
-}
-
-
-
-
-    // Update status booking
+    $booking->bukti_pembayaran = $request->bukti_transfer_url;
     $booking->metode_pembayaran = 'qris';
     $booking->status = 'waiting';
     $booking->save();
 
-    // Redirect ke profil user
-    return redirect()
-        ->route('profil.index')
-        ->with('success', 'Bukti pembayaran berhasil dikirim');
+    return response()->json(['success' => true]);
 }
+
 
 
     public function clearHistory()

@@ -17,7 +17,6 @@
             min-height: 100vh;
             margin: 0;
         }
-
         .payment-card {
             background: rgba(20,20,20,0.95);
             padding: 30px 40px;
@@ -29,95 +28,20 @@
             align-items: center;
             text-align: center;
         }
-
-        h2, h3 {
-            color: #d4af37;
-            margin-bottom: 15px;
-        }
-
-        p {
-            margin: 6px 0;
-        }
-
-        hr {
-            border: 0;
-            border-top: 1px solid #444;
-            width: 100%;
-            margin: 15px 0;
-        }
-
-        .qris-section {
-            margin: 20px 0;
-        }
-
-        .qris-section img {
-            width: 250px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(212,175,55,0.5);
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-        }
-
-        input[type="file"] {
-            padding: 8px;
-            border-radius: 10px;
-            border: none;
-            background: #222;
-            color: #fff;
-        }
-
-        button {
-            background: #d4af37;
-            border: none;
-            color: #111;
-            font-weight: 700;
-            padding: 12px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #fff;
-            color: #000;
-        }
-
-        .note {
-            font-size: 0.85em;
-            color: #ccc;
-        }
-
-        /* Tambahan styling error / flash */
-        .alert {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            text-align: left;
-        }
-
-        .alert-error {
-            background: #ffcccc;
-            color: #990000;
-        }
-
-        .alert-success {
-            background: #ccffcc;
-            color: #006600;
-        }
-
-        .error-text {
-            color: #ff9999;
-            font-size: 0.85em;
-            margin-top: -10px;
-            margin-bottom: 10px;
-            text-align: left;
-        }
+        h2, h3 { color: #d4af37; margin-bottom: 15px; }
+        p { margin: 6px 0; }
+        hr { border: 0; border-top: 1px solid #444; width: 100%; margin: 15px 0; }
+        .qris-section { margin: 20px 0; }
+        .qris-section img { width: 250px; border-radius: 10px; box-shadow: 0 0 15px rgba(212,175,55,0.5); }
+        form { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        input[type="file"] { padding: 8px; border-radius: 10px; border: none; background: #222; color: #fff; }
+        button { background: #d4af37; border: none; color: #111; font-weight: 700; padding: 12px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #fff; color: #000; }
+        .note { font-size: 0.85em; color: #ccc; }
+        .alert { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 10px; text-align: left; }
+        .alert-error { background: #ffcccc; color: #990000; }
+        .alert-success { background: #ccffcc; color: #006600; }
+        .error-text { color: #ff9999; font-size: 0.85em; margin-top: -10px; margin-bottom: 10px; text-align: left; }
     </style>
 </head>
 <body>
@@ -143,32 +67,76 @@
         <p class="note">* Setelah melakukan pembayaran, upload bukti transfer.</p>
     </div>
 
-    <!-- Tampilkan flash message sukses atau error -->
+    <!-- Flash message -->
     @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-error">{{ session('error') }}</div>
+    @endif
 
-@if(session('error'))
-    <div class="alert alert-error">
-        {{ session('error') }}
-    </div>
-@endif
+    <!-- Form baru untuk JS upload -->
+    <form id="uploadForm">
+        @csrf
+        <label>Upload Bukti Pembayaran</label>
+        <input type="file" id="bukti_transfer" required>
+        <input type="hidden" name="bukti_transfer_url" id="bukti_transfer_url">
+        <button type="submit" id="submitBtn">Kirim Bukti Pembayaran</button>
+    </form>
 
-<form action="{{ route('booking.payment.upload', $booking->id) }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    <label>Upload Bukti Pembayaran</label>
-    <input type="file" name="bukti_transfer" required>
-
-    @error('bukti_transfer')
-        <div class="error-text">{{ $message }}</div>
-    @enderror
-
-    <button type="submit">Kirim Bukti Pembayaran</button>
-</form>
-
+    <div id="status" style="margin-top:10px; color:#d4af37;"></div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.6/axios.min.js"></script>
+<script>
+document.getElementById('uploadForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const fileInput = document.getElementById('bukti_transfer');
+    const file = fileInput.files[0];
+    const status = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if(!file){
+        alert('Pilih file terlebih dahulu!');
+        return;
+    }
+
+    submitBtn.disabled = true;
+    status.innerText = 'Uploading ke Cloudinary...';
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'booking_unsigned'); // <-- ganti sesuai preset Unsigned kamu
+
+    try {
+        const cloudName = 'drlg2oapt'; // <-- ganti sesuai cloud name kamu
+        const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
+
+        const response = await axios.post(url, formData);
+        const secure_url = response.data.secure_url;
+
+        // Simpan URL ke hidden input
+        document.getElementById('bukti_transfer_url').value = secure_url;
+
+        status.innerText = 'Upload sukses! Mengirim ke server...';
+
+        // Kirim URL ke Laravel
+        const laravelForm = new FormData();
+        laravelForm.append('_token', '{{ csrf_token() }}');
+        laravelForm.append('bukti_transfer_url', secure_url);
+
+        await axios.post('{{ route('booking.payment.upload', $booking->id) }}', laravelForm);
+
+        status.innerText = 'Bukti pembayaran berhasil dikirim!';
+        window.location.href = '{{ route('profil.index') }}';
+
+    } catch(err){
+        console.error(err);
+        status.innerText = 'Gagal upload. Cek console.';
+        submitBtn.disabled = false;
+    }
+});
+</script>
 
 </body>
 </html>
