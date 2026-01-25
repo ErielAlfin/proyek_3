@@ -38,10 +38,8 @@ input[type="file"] { padding: 8px; border-radius: 10px; border: none; background
 button { background: #d4af37; border: none; color: #111; font-weight: 700; padding: 12px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
 button:hover { background: #fff; color: #000; }
 .note { font-size: 0.85em; color: #ccc; }
-.alert { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 10px; text-align: left; }
-.alert-error { background: #ffcccc; color: #990000; }
-.alert-success { background: #ccffcc; color: #006600; }
 .status-text { font-size: 0.9em; color: #d4af37; text-align: center; margin-top: 10px; }
+.status-error { font-size: 0.85em; color: #ff6666; text-align: center; margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -67,7 +65,6 @@ button:hover { background: #fff; color: #000; }
         <p class="note">* Setelah melakukan pembayaran, upload bukti transfer.</p>
     </div>
 
-    <!-- Form upload bukti -->
     <form id="uploadForm">
         @csrf
         <label>Upload Bukti Pembayaran</label>
@@ -77,6 +74,7 @@ button:hover { background: #fff; color: #000; }
     </form>
 
     <div id="status" class="status-text"></div>
+    <div id="statusError" class="status-error"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.6/axios.min.js"></script>
@@ -86,7 +84,11 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
     const fileInput = document.getElementById('bukti_transfer');
     const file = fileInput.files[0];
     const status = document.getElementById('status');
+    const statusError = document.getElementById('statusError');
     const submitBtn = document.getElementById('submitBtn');
+
+    statusError.innerText = '';
+    status.innerText = '';
 
     if(!file){
         alert('Pilih file terlebih dahulu!');
@@ -115,16 +117,21 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
         laravelForm.append('_token', '{{ csrf_token() }}');
         laravelForm.append('bukti_transfer_url', secure_url);
 
-        await axios.post('{{ route('booking.payment.upload', $booking->id) }}', laravelForm);
+        const laravelResponse = await axios.post('{{ route('booking.payment.upload', $booking->id) }}', laravelForm);
 
-        status.innerText = 'Bukti pembayaran berhasil dikirim! Redirect ke profil...';
-        setTimeout(() => {
-            window.location.href = '{{ route('profil.index') }}';
-        }, 1000);
+        if(laravelResponse.data.success){
+            status.innerText = 'Bukti pembayaran berhasil dikirim! Redirect ke profil...';
+            setTimeout(() => {
+                window.location.href = '{{ route('profil.index') }}';
+            }, 1000);
+        } else {
+            statusError.innerText = 'Server menolak data. Periksa log Laravel.';
+            submitBtn.disabled = false;
+        }
 
     } catch(err){
-        console.error(err.response ? err.response.data : err);
-        status.innerText = 'Gagal upload. Cek console.';
+        console.error('Error detail:', err.response ? err.response.data : err);
+        statusError.innerText = 'Gagal upload! Lihat console untuk detail.';
         submitBtn.disabled = false;
     }
 });
