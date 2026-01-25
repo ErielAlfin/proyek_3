@@ -67,13 +67,21 @@ class BookingController extends Controller
     if ($request->hasFile('bukti_transfer')) {
     try {
         $cloudinary = new \Cloudinary\Cloudinary(env('CLOUDINARY_URL'));
-        $filePath = $request->file('bukti_transfer')->getPathname();
-        $upload = $cloudinary->uploadApi()->upload($filePath, ['folder' => 'bukti_transfer']);
+
+        $file = $request->file('bukti_transfer');
+        $stream = fopen($file->getPathname(), 'r');
+
+        $upload = $cloudinary->uploadApi()->upload($stream, ['folder' => 'bukti_transfer']);
+
+        fclose($stream);
+
         $booking->bukti_pembayaran = $upload['secure_url'];
+
     } catch (\Exception $e) {
         return back()->with('error', 'Gagal upload ke Cloudinary: ' . $e->getMessage());
     }
 }
+
 
 
 
