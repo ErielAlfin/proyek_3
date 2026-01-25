@@ -145,32 +145,29 @@
 
     <!-- Tampilkan flash message sukses atau error -->
     @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @error('bukti_transfer')
-    <p style="color:red">{{ $message }}</p>
-@enderror
-
-@if(session('error'))
-    <p style="color:red">{{ session('error') }}</p>
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
 @endif
 
+@if(session('error'))
+    <div class="alert alert-error">
+        {{ session('error') }}
+    </div>
+@endif
 
-    <form action="{{ route('booking.payment.upload', $booking->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <label>Upload Bukti Pembayaran</label>
-        <input type="file" name="bukti_transfer" required>
+<form action="{{ route('booking.payment.upload', $booking->id) }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <label>Upload Bukti Pembayaran</label>
+    <input type="file" name="bukti_transfer" required>
 
-        <!-- Tampilkan error validasi file -->
-        @error('bukti_transfer')
-            <div class="error-text">{{ $message }}</div>
-        @enderror
+    @error('bukti_transfer')
+        <div class="error-text">{{ $message }}</div>
+    @enderror
 
-        <button type="submit">Kirim Bukti Pembayaran</button>
-    </form>
+    <button type="submit">Kirim Bukti Pembayaran</button>
+</form>
+
 </div>
 
 </body>
