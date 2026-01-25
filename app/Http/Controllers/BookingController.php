@@ -65,7 +65,7 @@ class BookingController extends Controller
     $booking->update([
         'bukti_pembayaran' => $request->bukti_transfer_url,
         'metode_pembayaran' => 'qris',   // pastikan ENUM / VARCHAR cocok
-        'status' => 'waiting',           // HARUS ADA DI ENUM
+        'status' => 'pending',           // HARUS ADA DI ENUM
     ]);
 
     return response()->json(['success' => true]);
