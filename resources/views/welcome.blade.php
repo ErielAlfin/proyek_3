@@ -91,7 +91,7 @@
         <div class="gallery-item">
           <img src="{{ $gallery->foto }}">
           <h3>{{ $gallery->judul }}</h3>
-  <p>{{ $galeri->deskripsi }}</p>
+  <p>{{ $gallery->deskripsi }}</p>
         </div>
       @endforeach
     </div>
