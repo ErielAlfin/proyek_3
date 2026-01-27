@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Booking;
+use Cloudinary\Cloudinary;
 
 class ProfileController extends Controller
 {
@@ -25,24 +26,28 @@ class ProfileController extends Controller
 
 
     public function updatePhoto(Request $request)
-    {
-        $request->validate([
-            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+{
+    $request->validate([
+        'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
 
-        $user = Auth::user();
+    $user = Auth::user();
 
-        if ($user->foto && Storage::exists('public/' . $user->foto)) {
-            Storage::delete('public/' . $user->foto);
-        }
+    $cloudinary = new Cloudinary();
 
-        $path = $request->file('foto')->store('profile_photos', 'public');
+    $upload = $cloudinary->uploadApi()->upload(
+        $request->file('foto')->getRealPath(),
+        [
+            'folder' => 'profile_photos',
+        ]
+    );
 
-        $user->foto = $path;
-        $user->save();
+    // SIMPAN URL, BUKAN PATH
+    $user->foto = $upload['secure_url'];
+    $user->save();
 
-        return back()->with('success', 'Foto profil berhasil diperbarui!');
-    }
+    return back()->with('success', 'Foto profil berhasil diperbarui!');
+}
 
     public function updateProfile(Request $request)
     {

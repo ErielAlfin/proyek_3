@@ -20,7 +20,10 @@
     <!-- Kiri: Profil User -->
     <div class="profile-card">
       <div class="profile-photo">
-        <img id="profileImage" src="{{ $user->foto ? asset('storage/'.$user->foto) : asset('assets/img/default-avatar.png') }}" alt="User">
+        <img id="profileImage"
+     src="{{ $user->foto ?? asset('assets/img/default-avatar.png') }}"
+     alt="User">
+
         <form action="{{ route('profil.update.photo') }}" method="POST" enctype="multipart/form-data">
           @csrf
           <input type="file" name="foto" id="uploadPhoto" accept="image/*" hidden>
