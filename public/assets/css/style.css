@@ -586,3 +586,17 @@ body {
   color: #333;
   line-height: 1.6;
 }
+
+.reviews-wrapper {
+  background: #ffffff;
+  padding: 50px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .reviews-wrapper {
+    padding: 30px 20px;
+  }
+}

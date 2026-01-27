@@ -50,7 +50,7 @@
     <div class="services-grid">
       @foreach($layanans as $layanan)
         <div class="service-card">
-          <div class="service-icon">✂️</div>
+          <div class="service-icon">💈</div>
           <h3>{{ $layanan->nama }}</h3>
           <p>{{ $layanan->deskripsi }}</p>
           <span class="price">Rp {{ number_format($layanan->harga,0,',','.') }}</span>
@@ -103,40 +103,45 @@
 {{-- Reviews --}}
 <section id="reviews" class="reviews">
   <div class="container">
-    <h2 class="section-title">Apa Kata Pelanggan Kami</h2>
 
-    <div class="review-grid">
-      @forelse($reviews as $review)
-        <div class="review-card">
-          
-          <div class="review-header">
-            <strong>{{ $review->booking->user->name ?? 'Pelanggan' }}</strong>
-            <span class="review-date">
-              {{ $review->created_at->format('d M Y') }}
-            </span>
+    <div class="reviews-wrapper">
+      <h2 class="section-title">Apa Kata Pelanggan Kami</h2>
+
+      <div class="review-grid">
+        @forelse($reviews as $review)
+          <div class="review-card">
+
+            <div class="review-header">
+              <strong>{{ $review->booking->user->name ?? 'Pelanggan' }}</strong>
+              <span class="review-date">
+                {{ $review->created_at->format('d M Y') }}
+              </span>
+            </div>
+
+            <p class="review-barber">
+              Barber: {{ $review->barber->nama ?? '-' }}
+            </p>
+
+            <div class="review-rating">
+              @for ($i = 1; $i <= 5; $i++)
+                {{ $i <= $review->rating ? '⭐' : '☆' }}
+              @endfor
+            </div>
+
+            <p class="review-comment">
+              "{{ $review->comment }}"
+            </p>
+
           </div>
-
-          <p class="review-barber">
-            Barber: {{ $review->barber->nama ?? '-' }}
-          </p>
-
-          <div class="review-rating">
-            @for ($i = 1; $i <= 5; $i++)
-              {{ $i <= $review->rating ? '⭐' : '☆' }}
-            @endfor
-          </div>
-
-          <p class="review-comment">
-            "{{ $review->comment }}"
-          </p>
-
-        </div>
-      @empty
-        <p class="text-center">Belum ada review.</p>
-      @endforelse
+        @empty
+          <p class="text-center">Belum ada review.</p>
+        @endforelse
+      </div>
     </div>
+
   </div>
 </section>
+
 
 
 
