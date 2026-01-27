@@ -90,8 +90,8 @@
       @foreach($galleries as $gallery)
         <div class="gallery-item">
           <img src="{{ $gallery->foto }}">
-          <h4>{{ $gallery->judul }}</h4>
-  <p>{{ $gallery->deskripsi }}</p>
+          <h3>{{ $gallery->judul }}</h3>
+  <p>{{ $galeri->deskripsi }}</p>
         </div>
       @endforeach
     </div>
