@@ -72,7 +72,7 @@
         <div class="barber-card">
           <img src="{{ $barber->foto }}" alt="{{ $barber->nama }}">
           <h3>{{ $barber->nama }}</h3>
-          <p>{{ $barber->deskripsi }}</p>
+          <p>{{ $barber->spesialis }}</p>
         </div>
       @endforeach
     </div>
@@ -90,6 +90,7 @@
       @foreach($galleries as $gallery)
         <div class="gallery-item">
           <img src="{{ $gallery->foto }}">
+          <p>{{ $gallery->deskripsi }}</p>
         </div>
       @endforeach
     </div>
