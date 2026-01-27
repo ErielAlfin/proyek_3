@@ -153,7 +153,7 @@
           <div class="contact-item">
             <div class="contact-icon">📍</div>
             <h3>Alamat</h3>
-            <p>Jl. Kebon Jeruk No. 123<br>Jakarta Barat, 11530</p>
+            <p>Jl. Asem 2 No. 123<br>Jakarta Selatan, 11530</p>
           </div>
           <div class="contact-item">
             <div class="contact-icon">📞</div>
