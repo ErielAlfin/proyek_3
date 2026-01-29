@@ -51,15 +51,18 @@ class BookingController extends Controller
 
     // BARU CREATE
     $booking = Booking::create([
-        'user_id' => auth()->id(),
-        'barber_id' => $request->barber_id,
-        'layanan_id' => $request->layanan_id,
-        'tanggal' => $request->tanggal,
-        'jam' => $request->jam,
-        'durasi' => $durasi,
-        'harga' => $request->harga,
-        'status' => 'pending',
-    ]);
+    'user_id' => auth()->id(),
+    'barber_id' => $request->barber_id,
+    'layanan_id' => $request->layanan_id,
+    'tanggal' => $request->tanggal,
+    'jam' => $request->jam,
+    'end_time' => $endRequest->format('H:i'), // <--- tambah ini
+    'durasi' => $durasi,
+    'harga' => $request->harga,
+    'status' => 'pending',
+]);
+
+
 
     return redirect()->route('booking.payment.show', $booking->id);
 }
