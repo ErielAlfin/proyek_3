@@ -103,12 +103,17 @@ class BarberController extends Controller
         return redirect()->route('admin.barber.index')->with('success', 'Barber berhasil dihapus!');
     }
     
-    public function show(Barber $barber)
+    public function show($id)
 {
-    // kalau mau sekalian review:
-    // $reviews = $barber->reviews()->latest()->get();
+    $barber = Barber::findOrFail($id);
 
-    return view('barber.show', compact('barber'));
+    $reviews = Review::where('barber_id', $id)
+        ->with('booking.user')
+        ->latest()
+        ->get();
+
+    return view('barber.show', compact('barber', 'reviews'));
 }
+
 
 }

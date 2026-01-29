@@ -1,16 +1,22 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ $barber->nama }}</title>
-</head>
-<body>
+<h1>{{ $barber->nama }}</h1>
+<p>{{ $barber->spesialis }}</p>
 
-<div class="container">
-    <h1>{{ $barber->nama }}</h1>
-    <img src="{{ asset('assets/img/'.$barber->foto) }}" width="200">
-    <p>{{ $barber->deskripsi }}</p>
-</div>
+<hr>
 
-</body>
-</html>
+<h2>Review Pelanggan</h2>
+
+@forelse($reviews as $review)
+  <div class="review-card">
+    <strong>{{ $review->booking->user->name ?? 'Pelanggan' }}</strong>
+
+    <div class="review-rating">
+      @for($i = 1; $i <= 5; $i++)
+        {{ $i <= $review->rating ? '⭐' : '☆' }}
+      @endfor
+    </div>
+
+    <p>"{{ $review->comment }}"</p>
+  </div>
+@empty
+  <p>Belum ada review untuk barber ini.</p>
+@endforelse

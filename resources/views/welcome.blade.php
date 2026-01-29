@@ -69,12 +69,12 @@
     <h2 class="section-title">Barber Profesional Kami</h2>
     <div class="barber-grid">
       @foreach($barbers as $barber)
-        <div class="barber-card">
-          <img src="{{ $barber->foto }}" alt="{{ $barber->nama }}">
-          <h3>{{ $barber->nama }}</h3>
-          <p>{{ $barber->spesialis }}</p>
-        </div>
-      @endforeach
+  <a href="{{ route('barber.show', $barber->id) }}" class="barber-card">
+    <img src="{{ $barber->foto }}" alt="{{ $barber->nama }}">
+    <h3>{{ $barber->nama }}</h3>
+    <p>{{ $barber->spesialis }}</p>
+  </a>
+@endforeach
     </div>
   </div>
 </section>
@@ -97,53 +97,6 @@
     </div>
   </div>
 </section>
-
-
-
-{{-- Reviews --}}
-<section id="reviews" class="reviews">
-  <div class="container">
-
-    <div class="reviews-wrapper">
-      <h2 class="section-title">Apa Kata Pelanggan Kami</h2>
-
-      <div class="review-grid">
-        @forelse($reviews as $review)
-          <div class="review-card">
-
-            <div class="review-header">
-              <strong>{{ $review->booking->user->name ?? 'Pelanggan' }}</strong>
-              <span class="review-date">
-                {{ $review->created_at->format('d M Y') }}
-              </span>
-            </div>
-
-            <p class="review-barber">
-              Barber: {{ $review->barber->nama ?? '-' }}
-            </p>
-
-            <div class="review-rating">
-              @for ($i = 1; $i <= 5; $i++)
-                {{ $i <= $review->rating ? '⭐' : '☆' }}
-              @endfor
-            </div>
-
-            <p class="review-comment">
-              "{{ $review->comment }}"
-            </p>
-
-          </div>
-        @empty
-          <p class="text-center">Belum ada review.</p>
-        @endforelse
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-
 
     {{-- Contact --}}
     <section id="contact" class="contact">

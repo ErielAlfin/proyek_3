@@ -61,8 +61,9 @@ Route::post('/register', function (Request $request) {
     return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
 })->name('register.post');
 
-Route::get('/barber/{barber}', [BarberController::class, 'show'])
-    ->name('komentar');
+Route::get('/barber/{id}', [BarberController::class, 'show'])
+    ->name('barber.show');
+
 
 /*
 |--------------------------------------------------------------------------
