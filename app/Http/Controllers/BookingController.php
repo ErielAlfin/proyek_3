@@ -32,7 +32,7 @@ class BookingController extends Controller
 $durasi = $layanan->durasi;
 
 $startRequest = Carbon::parse($request->tanggal.' '.$request->jam);
-$endRequest   = $startRequest->copy()->addMinutes($durasi);
+$endRequest   = $startRequest->copy()->addMinutes($layanan->durasi);
 
 
     // ambil booking barber di tanggal tersebut
@@ -57,8 +57,7 @@ $endRequest   = $startRequest->copy()->addMinutes($durasi);
     'layanan_id' => $request->layanan_id,
     'tanggal' => $request->tanggal,
     'jam' => $request->jam,
-    'end_time' => $endRequest->format('H:i'), // HARUS ADA
-    'durasi' => $durasi,
+    'end_time' => $endRequest->format('H:i'), // wajib
     'harga' => $request->harga,
     'status' => 'pending',
 ]);
