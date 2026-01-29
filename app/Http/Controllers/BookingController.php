@@ -29,10 +29,11 @@ class BookingController extends Controller
 
     // ambil durasi layanan
     $layanan = Layanan::findOrFail($request->layanan_id);
-    $durasi = $layanan->durasi;
+$durasi = $layanan->durasi;
 
-    $startRequest = Carbon::parse($request->tanggal.' '.$request->jam);
-    $endRequest   = $startRequest->copy()->addMinutes($durasi);
+$startRequest = Carbon::parse($request->tanggal.' '.$request->jam);
+$endRequest   = $startRequest->copy()->addMinutes($durasi);
+
 
     // ambil booking barber di tanggal tersebut
     $bookings = Booking::where('barber_id', $request->barber_id)
@@ -56,7 +57,7 @@ class BookingController extends Controller
     'layanan_id' => $request->layanan_id,
     'tanggal' => $request->tanggal,
     'jam' => $request->jam,
-    'end_time' => $endRequest->format('H:i'), // <--- tambah ini
+    'end_time' => $endRequest->format('H:i'), // HARUS ADA
     'durasi' => $durasi,
     'harga' => $request->harga,
     'status' => 'pending',

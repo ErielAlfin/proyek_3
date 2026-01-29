@@ -18,11 +18,15 @@ class Booking extends Model
     'layanan_id',
     'tanggal',
     'jam',
+    'durasi',
+    'end_time', // wajib
     'harga',
     'status',
     'metode_pembayaran',
     'bukti_pembayaran',
 ];
+
+
 
 
     // Relasi ke user
