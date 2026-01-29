@@ -67,17 +67,24 @@
     <section id="barbers" class="barber-section">
   <div class="container">
     <h2 class="section-title">Barber Profesional Kami</h2>
+
     <div class="barber-grid">
       @foreach($barbers as $barber)
-  <a href="{{ route('barber.show', $barber->id) }}" class="barber-card">
-    <img src="{{ $barber->foto }}" alt="{{ $barber->nama }}">
-    <h3>{{ $barber->nama }}</h3>
-    <p>{{ $barber->spesialis }}</p>
-  </a>
-@endforeach
+        <div class="barber-card">
+          <img src="{{ $barber->foto }}" alt="{{ $barber->nama }}">
+
+          <h3>{{ $barber->nama }}</h3>
+          <p>{{ $barber->spesialis }}</p>
+
+          <a href="{{ route('barber.show', $barber->id) }}" class="btn-detail">
+            Lihat Barber
+          </a>
+        </div>
+      @endforeach
     </div>
   </div>
 </section>
+
 
 
 
