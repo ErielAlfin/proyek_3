@@ -116,6 +116,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/booking/clear-history', [BookingController::class, 'clearHistory'])
         ->name('booking.clearHistory');
 
+    Route::get('/available-times', [BookingController::class, 'availableTimes']);
+
+
     // Profil
     Route::get('/profil', [ProfileController::class, 'index'])->name('profil.index');
     Route::post('/profil/photo', [ProfileController::class, 'updatePhoto'])->name('profil.update.photo');

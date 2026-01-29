@@ -98,7 +98,10 @@
 <input type="date" name="tanggal" required>
 
 <label>Jam</label>
-<input type="time" name="jam" required>
+<select name="jam" id="jam" required>
+  <option value="">-- Pilih Jam --</option>
+</select>
+
 
 
     <!-- hidden input harga -->
@@ -122,6 +125,28 @@ layananSelect.addEventListener('change', () => {
     hargaInput.value = harga;
     totalDisplay.value = 'Rp ' + Number(harga).toLocaleString('id-ID');
 });
+
+const barber = document.querySelector('[name="barber_id"]');
+const tanggal = document.querySelector('[name="tanggal"]');
+const layanan = document.getElementById('layanan');
+const jamSelect = document.getElementById('jam');
+
+function loadTimes() {
+    if (!barber.value || !tanggal.value || !layanan.value) return;
+
+    fetch(`/available-times?barber_id=${barber.value}&tanggal=${tanggal.value}&layanan_id=${layanan.value}`)
+        .then(res => res.json())
+        .then(data => {
+            jamSelect.innerHTML = '<option value="">-- Pilih Jam --</option>';
+            data.forEach(jam => {
+                jamSelect.innerHTML += `<option value="${jam}">${jam}</option>`;
+            });
+        });
+}
+
+barber.addEventListener('change', loadTimes);
+tanggal.addEventListener('change', loadTimes);
+layanan.addEventListener('change', loadTimes);
 </script>
 
 
